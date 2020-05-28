@@ -1,6 +1,6 @@
 package br.edu.unifacisa.p3.atividade13;
 
-import java.util.Stack;
+import java.util.LinkedList;
 
 /**
  * Projeto implementação de uma árvore binária
@@ -13,7 +13,6 @@ import java.util.Stack;
 public class ArvoreBinaria {
 	private static class No {
 		int value;
-		int altura;
 		No left;
 		No right;
 		No pai;
@@ -23,7 +22,6 @@ public class ArvoreBinaria {
 			this.left = null;
 			this.right = null;
 			this.pai = null;
-			this.altura = 0;
 		}
 
 		@Override
@@ -35,8 +33,7 @@ public class ArvoreBinaria {
 			right1 = right == null ? "null" : "" + right.value;
 			pai1 = pai == null ? "null" : "" + pai.value;
 
-			String saida = "[value=" + value + ", left=" + left1 + ", right=" + right1 + ", pai=" + pai1 + ", altura="
-					+ altura + "]";
+			String saida = "[value=" + value + ", left=" + left1 + ", right=" + right1 + ", pai=" + pai1 + "]";
 			return saida;
 		}
 	}
@@ -62,10 +59,6 @@ public class ArvoreBinaria {
 	 */
 	private int folhas = 0;
 	/**
-	 * Variável representando a altura da arvore binária.
-	 */
-	private int altura = 0;
-	/**
 	 * Variável representando o valor máximo da arvore binária.
 	 */
 	private int valorMaximo = 0;
@@ -79,7 +72,6 @@ public class ArvoreBinaria {
 		No novoNo = new No(value);
 		if (raiz == null) {
 			raiz = novoNo;
-			raiz.altura = 1;
 		} else
 			AdicionarNoV1(novoNo);
 		tamanho++;
@@ -94,7 +86,6 @@ public class ArvoreBinaria {
 					atual = atual.left;
 				else {
 					no.pai = atual;
-					no.altura = no.pai.altura + 1;
 					atual.left = no;
 					adicionou = true;
 				}
@@ -103,7 +94,6 @@ public class ArvoreBinaria {
 					atual = atual.right;
 				else {
 					no.pai = atual;
-					no.altura = no.pai.altura + 1;
 					atual.right = no;
 					adicionou = true;
 				}
@@ -119,6 +109,7 @@ public class ArvoreBinaria {
 	public void inserirV2(int valor) {
 		raiz = AdicionarNoV2(raiz, valor);
 		tamanho++;
+
 	}
 
 	private No AdicionarNoV2(No node, int valor) {
@@ -128,18 +119,19 @@ public class ArvoreBinaria {
 					AdicionarNoV2(node.left, valor);
 				} else {
 					node.left = new No(valor);
+					node.left.pai = node;
 				}
 			} else if (valor > node.value) {
 				if (node.right != null) {
 					AdicionarNoV2(node.right, valor);
 				} else {
 					node.right = new No(valor);
+					node.right.pai = node;
 				}
 			}
 		} else {
 			node = new No(valor);
 		}
-
 		return node;
 	}
 
@@ -263,20 +255,24 @@ public class ArvoreBinaria {
 	 * @return um numero inteiro representando a altura da árvore binária.
 	 */
 	public int getAltura() {
-		return getAlturaDaArvore(raiz);
+		return getAltura(this.raiz);
 	}
 
-	private int getAlturaDaArvore(No no) {
-		if (no != null) {
-			getAlturaDaArvore(no.left);
-			getAlturaDaArvore(no.right);
-			if (no.altura > altura) {
-				altura = no.altura;
-			}
+	private int getAltura(No node) {
+		if (node == null) {
+			return 0;
 		}
-		return altura;
-	}
+		int alturaEsquerda = getAltura(node.left);
+		int alturaDireita = getAltura(node.right);
 
+		if (alturaEsquerda > alturaDireita) {
+			return alturaEsquerda + 1;
+		} else {
+			return alturaDireita + 1;
+		}
+
+	}
+	
 	/**
 	 * Retorna a raiz da árvore binária.
 	 * 
@@ -312,25 +308,81 @@ public class ArvoreBinaria {
 	 * Exibe os nós da árvore organizados em pré-ordem sem recursividade.
 	 */
 	public void preOrdemV2() {
-		preOrdemV2(raiz);
+		LinkedList<No> jaPassou = new LinkedList<No>();
+		No atual = raiz;
+		int cont = 1;
+		System.out.print(atual.value + " ");
+		while (cont < tamanho) {
+			if (atual.left != null && !jaPassou.contains(atual.left)) {
+				atual = atual.left;
+				System.out.print(atual.value + " ");
+				jaPassou.add(atual);
+				cont++;
+			} else if (atual.right != null && !jaPassou.contains(atual.right)) {
+				atual = atual.right;
+				System.out.print(atual.value + " ");
+				jaPassou.add(atual);
+				cont++;
+			} else {
+				atual = atual.pai;
+			}
+		}
+	}
+	
+	/**
+	 * Remove o todas as aparições do valor especificado.
+	 * @param valor
+	 */
+	public void remover(int valor) {
+		remover(raiz, valor);
 	}
 
-	private void preOrdemV2(No no) {
-		Stack<No> pilha = new Stack<No>();
-		boolean terminou = true;
-		while (terminou) {
-			if (no != null) {
-				System.out.print(no.value + " ");
-				pilha.push(no);
-				no = no.left;
-			} else {
-				if (!pilha.isEmpty()) {
-					no = pilha.pop();
-					no = no.right;
+	private void remover(No no, int valor) {
+		if (no != null) {
+			remover(no.left, valor);
+			remover(no.right, valor);
+			if (no.value == valor) {
+				if (isFolha(no)) {
+					if (no.value > no.pai.value)
+						no.pai.right = null;
+					else
+						no.pai.left = null;
+				} else if (no.value == raiz.value) {
+					if (no.right != null) {
+						raiz = no.right;
+						no.right.pai = null;
+					} else {
+						raiz = no.left;
+						no.left.pai = null;
+					}
 				} else {
-					terminou = false;
+					No atual = no;
+					if (no.left != null) {
+						atual = atual.left;
+						while (atual.right != null) {
+							atual = atual.right;
+						}
+						no.value = atual.value;
+						atual.pai.right = null;
+					} else {
+						atual = atual.right;
+						while (atual.left != null) {
+							atual = atual.left;
+						}
+						no.value = atual.value;
+						atual.pai.left = null;
+					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Verifica se o nó é uma folha.
+	 * @param no nó que será verificado
+	 * @return se o nó for uma folha, retorna true, caso contrário, false.
+	 */
+	private boolean isFolha(No no) {
+		return no.left == null && no.right == null ? true : false;
 	}
 }
