@@ -1,10 +1,17 @@
 package br.edu.unifacisa.p3.atividade13;
 
+import java.util.Stack;
+
+/**
+ * Projeto implementação de uma árvore binária
+ * 
+ * @author Lucas Morais
+ * 
+ *         github.com/LucasMorais1/Unifacisa-P3
+ */
+
 public class ArvoreBinaria {
 	private static class No {
-		/**
-		 * Valor do nó.
-		 */
 		int value;
 		int altura;
 		No left;
@@ -58,11 +65,15 @@ public class ArvoreBinaria {
 	 * Variável representando a altura da arvore binária.
 	 */
 	private int altura = 0;
+	/**
+	 * Variável representando o valor máximo da arvore binária.
+	 */
+	private int valorMaximo = 0;
 
 	/**
 	 * Inserindo nó na arvore binária sem recursividade.
 	 * 
-	 * @param valor que será adicionado na arvore.
+	 * @param valor á ser adicionado na arvore.
 	 */
 	public void inserirV1(int value) {
 		No novoNo = new No(value);
@@ -103,10 +114,11 @@ public class ArvoreBinaria {
 	/**
 	 * Inserindo nó na arvore binária com recursividade.
 	 * 
-	 * @param valor que será adicionado na arvore.
+	 * @param valor á ser adicionado na arvore.
 	 */
 	public void inserirV2(int valor) {
 		raiz = AdicionarNoV2(raiz, valor);
+		tamanho++;
 	}
 
 	private No AdicionarNoV2(No node, int valor) {
@@ -127,6 +139,7 @@ public class ArvoreBinaria {
 		} else {
 			node = new No(valor);
 		}
+
 		return node;
 	}
 
@@ -162,15 +175,15 @@ public class ArvoreBinaria {
 	/**
 	 * Exibe os nós da árvore organizados em pré-ordem.
 	 */
-	public void preOrdem() {
-		preOrdem(raiz);
+	public void preOrdemV1() {
+		preOrdemV1(raiz);
 	}
 
-	private void preOrdem(No no) {
+	private void preOrdemV1(No no) {
 		if (no != null) {
 			System.out.print(no.value + " ");
-			preOrdem(no.left);
-			preOrdem(no.right);
+			preOrdemV1(no.left);
+			preOrdemV1(no.right);
 		}
 	}
 
@@ -250,13 +263,13 @@ public class ArvoreBinaria {
 	 * @return um numero inteiro representando a altura da árvore binária.
 	 */
 	public int getAltura() {
-		return getAltura(raiz);
+		return getAlturaDaArvore(raiz);
 	}
 
-	private int getAltura(No no) {
+	private int getAlturaDaArvore(No no) {
 		if (no != null) {
-			getAltura(no.left);
-			getAltura(no.right);
+			getAlturaDaArvore(no.left);
+			getAlturaDaArvore(no.right);
 			if (no.altura > altura) {
 				altura = no.altura;
 			}
@@ -274,5 +287,50 @@ public class ArvoreBinaria {
 			return null;
 		else
 			return raiz;
+	}
+
+	/**
+	 * Retorna o valor máximo da árvore binária.
+	 * 
+	 * @return valor máximo da árvore binária.
+	 */
+	public int getValorMaximo() {
+		return getValorMaximo(raiz);
+	}
+
+	private int getValorMaximo(No no) {
+		if (no != null) {
+			getValorMaximo(no.right);
+			if (no.value > valorMaximo) {
+				valorMaximo = no.value;
+			}
+		}
+		return valorMaximo;
+	}
+
+	/**
+	 * Exibe os nós da árvore organizados em pré-ordem sem recursividade.
+	 */
+	public void preOrdemV2() {
+		preOrdemV2(raiz);
+	}
+
+	private void preOrdemV2(No no) {
+		Stack<No> pilha = new Stack<No>();
+		boolean terminou = true;
+		while (terminou) {
+			if (no != null) {
+				System.out.print(no.value + " ");
+				pilha.push(no);
+				no = no.left;
+			} else {
+				if (!pilha.isEmpty()) {
+					no = pilha.pop();
+					no = no.right;
+				} else {
+					terminou = false;
+				}
+			}
+		}
 	}
 }
