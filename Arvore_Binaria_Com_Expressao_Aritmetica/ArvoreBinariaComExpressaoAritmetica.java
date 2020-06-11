@@ -5,7 +5,7 @@ import br.edu.unifacisa.p3.atividade10.ListaEncadeada;
 
 public class ArvoreBinariaComExpressaoAritmetica{
 	/**
-	 * MÈtodo que organiza uma equaÁ„o aritmÈtica em uma Arvore Bin·ria .
+	 * M√©todo que organiza uma equa√ß√£o aritm√©tica em uma Arvore Bin√°ria .
 	 * @author Lucas Morais
 	 * 
 	 * github.com/LucasMorais1
@@ -40,8 +40,8 @@ public class ArvoreBinariaComExpressaoAritmetica{
 	private No raiz;
 	
 	/**
-	 * Criando ·rvore bin·ria, a partir de uma equaÁ„o.
-	 * @param eq, equaÁ„o que deseja transformar em uma ·rvore;
+	 * Criando √Årvore bin√°ria, a partir de uma equa√ß√£o.
+	 * @param eq, equa√ß√£o que deseja transformar em uma √°rvore;
 	 */
 	public void add(String eq) {
 		ListaEncadeada<Character> l = new ListaEncadeada<Character>();
@@ -85,13 +85,21 @@ public class ArvoreBinariaComExpressaoAritmetica{
 		}
 	}
 	
+	/**
+	 * Verifica se o caractere representa alguma opera√ß√£o.
+	 * @param v caractere que deseja verificar.
+	 * @return true se o caracter representar alguma opera√ß√£o, caso contrario, false.
+	 */
 	private boolean isOperacao(Character v) {
 		if (v == '+' || v == '-' || v == '*' || v == '/') {
 			return true;
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Exibe a arvore em ordem.
+	 */
 	public void emOrdem() {
 		emOrdem(raiz);
 		System.out.println();
@@ -104,48 +112,4 @@ public class ArvoreBinariaComExpressaoAritmetica{
 			emOrdem(no.right);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	public No criar(No no, String str) {
-//		char equaÁao = str.charAt(0);
-// 		if (no == null) { // Arvore vazia
-//			no = new No(str);
-//			add = true; // condiÁ„o para nao entrar no ultimo if
-//		} else if (naoNumero(no.right)) {
-//			no.right = criar(no.right, str);
-//		}
-//		/*
-//		 * Caso nao encontrou nenhum lugar do lado direito, insere no lado
-//		 * esquerdo
-//		 */
-//		if ((!add) & naoNumero(no.left)) {
-//			no.left = criar(no.left, str);
-//		}
-//
-//		return no;
-//	}
-//	
-//	boolean naoNumero(No no) {
-//		try {
-//			Integer.parseInt(no.value);
-//			return false;
-//		} catch (Exception e) {
-//			return true;
-//		}
-//	}
 }
