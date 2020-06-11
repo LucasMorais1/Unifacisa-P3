@@ -1,11 +1,11 @@
 package br.edu.unifacisa.p3.ArvoreBinariaComExpressaoAritmetica;
 
-import br.edu.unifacisa.p3.Item;
+import br.edu.unifacisa.p3.atividade10.Item;
 import br.edu.unifacisa.p3.atividade10.ListaEncadeada;
 
 public class ArvoreBinariaComExpressaoAritmetica{
 	/**
-	 * Método que organiza uma equação aritmética em uma Arvore Binária .
+	 * Mï¿½todo que organiza uma equaï¿½ï¿½o aritmï¿½tica em uma Arvore Binï¿½ria .
 	 * @author Lucas Morais
 	 * 
 	 * github.com/LucasMorais1
@@ -40,8 +40,8 @@ public class ArvoreBinariaComExpressaoAritmetica{
 	private No raiz;
 	
 	/**
-	 * Criando árvore binária, a partir de uma equação.
-	 * @param eq, equação que deseja transformar em uma árvore;
+	 * Criando ï¿½rvore binï¿½ria, a partir de uma equaï¿½ï¿½o.
+	 * @param eq, equaï¿½ï¿½o que deseja transformar em uma ï¿½rvore;
 	 */
 	public void add(String eq) {
 		ListaEncadeada<Character> l = new ListaEncadeada<Character>();
@@ -122,10 +122,10 @@ public class ArvoreBinariaComExpressaoAritmetica{
 	
 	
 //	public No criar(No no, String str) {
-//		char equaçao = str.charAt(0);
+//		char equaï¿½ao = str.charAt(0);
 // 		if (no == null) { // Arvore vazia
 //			no = new No(str);
-//			add = true; // condição para nao entrar no ultimo if
+//			add = true; // condiï¿½ï¿½o para nao entrar no ultimo if
 //		} else if (naoNumero(no.right)) {
 //			no.right = criar(no.right, str);
 //		}
