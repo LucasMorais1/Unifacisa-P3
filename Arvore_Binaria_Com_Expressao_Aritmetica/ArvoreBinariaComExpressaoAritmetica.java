@@ -1,6 +1,6 @@
 package br.edu.unifacisa.p3.ArvoreBinariaComExpressaoAritmetica;
 
-import br.edu.unifacisa.p3.Item;
+import br.edu.unifacisa.p3.atividade10.Item;
 import br.edu.unifacisa.p3.atividade10.ListaEncadeada;
 
 public class ArvoreBinariaComExpressaoAritmetica{
@@ -40,11 +40,12 @@ public class ArvoreBinariaComExpressaoAritmetica{
 	private No raiz;
 	
 	/**
-	 * Criando Árvore binária, a partir de uma equação.
+	 * Criando árvore binária, a partir de uma equação.
 	 * @param eq, equação que deseja transformar em uma árvore;
 	 */
 	public void add(String eq) {
 		ListaEncadeada<Character> l = new ListaEncadeada<Character>();
+		
 		char[] equacao = eq.toCharArray();
 		for (char c : equacao) {
 			if (c!=' ')
@@ -57,22 +58,32 @@ public class ArvoreBinariaComExpressaoAritmetica{
 				No no = new No(atual.value);
 				if (atual.previous.value != ')') {
 					No esq = new No(atual.previous.value);
+					esq.pai = no;
 					no.left = esq;
 				}
 				if (atual.next.value != '(') {
 					No dir = new No(atual.next.value);
+					dir.pai = no;
 					no.right = dir;
-				}
-				if (atual.previous.value == ')' && atual.next.value == '(') {
-					while(raiz.pai != null) {
-						raiz = raiz.pai;
-					}
+				}				
+				if ((atual.previous.value == ')' && atual.next.value == '(')) {
+					no.left = null;
+					no.right = null;
 					no.left = raiz;
 					raiz.pai = no;
 					raiz = no;
 				}
-				
-				
+				else if (raiz != null) {
+					if (raiz.right != null) {
+						if ((raiz.right.value == no.left.value)) {
+							no.left = null;
+							no.right = null;
+							no.left = raiz;
+							raiz.pai = no;
+							raiz = no;
+							}
+						}
+				}								
 				if (raiz == null) {
 					raiz = no;
 				}
@@ -91,12 +102,12 @@ public class ArvoreBinariaComExpressaoAritmetica{
 	 * @return true se o caracter representar alguma operação, caso contrario, false.
 	 */
 	private boolean isOperacao(Character v) {
-		if (v == '+' || v == '-' || v == '*' || v == '/') {
+		if (v == '+' || v == '-' || v == '*' || v == '/' || v == '=') {
 			return true;
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Exibe a arvore em ordem.
 	 */
@@ -108,7 +119,7 @@ public class ArvoreBinariaComExpressaoAritmetica{
 	private void emOrdem(No no) {
 		if (no != null) {
 			emOrdem(no.left);
-			System.out.print(no.value + " ");
+			System.out.print(no + "\n");
 			emOrdem(no.right);
 		}
 	}
